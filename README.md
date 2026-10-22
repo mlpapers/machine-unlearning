@@ -2,72 +2,52 @@
 
 ## Removal targets and guarantees
 
-- **[Retraining as the reference](https://arxiv.org/abs/1907.05012)** (2019). Defines deletion relative to the learning algorithm trained on retained data. For randomized training, compare output distributions; matching the original model’s accuracy or making forgotten examples incorrect is a different target.
-
-- **[Data removal versus behavior suppression](https://arxiv.org/abs/2412.06966)** (2024). Removing a training contribution, erasing a concept and preventing an output are different objectives. Retained data may teach the same fact; success at suppressing answers need not establish equivalence to retraining.
-
-- **[Certified removal](https://proceedings.mlr.press/v119/guo20c.html)** (2020). Combines a Newton removal update with a randomly perturbed training objective. Bounds residual gradients to certify approximate retraining equivalence for regularized linear classifiers; convexity, smoothness and data bounds are part of the guarantee.
-
-- **[Output versus full-state deletion](https://arxiv.org/abs/2007.02923)** (2020). Deletion can constrain only the published model or also retained optimizer state. Descent-to-Delete distinguishes these targets; hidden checkpoints and auxiliary state matter when later updates can expose them.
-
-- **[Deletion capacity and generalization](https://arxiv.org/abs/2103.03279)** (2021). Studies how many deletions preserve population-risk guarantees under compute and storage constraints. Convex-loss results separate data-dependent unlearning from using DP alone; bounds depend on dimension and assumptions.
+- **Retraining as the reference** - Defines deletion relative to the learning algorithm trained on retained data. For randomized training, compare output distributions; matching the original model's accuracy or making forgotten examples incorrect is a different target. [Ginart et al. 2019](<https://arxiv.org/abs/1907.05012> "Making AI Forget You: Data Deletion in Machine Learning; NeurIPS").
+- **Data removal versus behavior suppression** - Removing a training contribution, erasing a concept and preventing an output are different objectives. Retained data may teach the same fact; success at suppressing answers need not establish equivalence to retraining. [Cooper et al. 2025](<https://arxiv.org/abs/2412.06966> "Machine Unlearning Doesn&#x27;t Do What You Think: Lessons for Generative AI Policy and Research; NeurIPS").
+- **Certified removal** - Combines a Newton removal update with a randomly perturbed training objective. Bounds residual gradients to certify approximate retraining equivalence for regularized linear classifiers; convexity, smoothness and data bounds are part of the guarantee. [Guo et al. 2020](<https://proceedings.mlr.press/v119/guo20c.html> "Certified Data Removal from Machine Learning Models; ICML").
+- **Output versus full-state deletion** - Deletion can constrain only the published model or also retained optimizer state. Descent-to-Delete distinguishes these targets; hidden checkpoints and auxiliary state matter when later updates can expose them. [Neel et al. 2020](<https://arxiv.org/abs/2007.02923> "Descent-to-Delete: Gradient-Based Methods for Machine Unlearning; arXiv").
+- **Deletion capacity and generalization** - Studies how many deletions preserve population-risk guarantees under compute and storage constraints. Convex-loss results separate data-dependent unlearning from using DP alone; bounds depend on dimension and assumptions. [Sekhari et al. 2021](<https://arxiv.org/abs/2103.03279> "Remember What You Want to Forget: Algorithms for Machine Unlearning; NeurIPS").
 
 ## Deletion-aware training and efficient retraining
 
-- **[Summation-form unlearning](https://www.cs.columbia.edu/~junfeng/papers/unlearning/)** (2015). Cao and Yang express suitable learning procedures through maintained statistical sums. Removing a record updates those sums; applicability depends on the algorithm’s representation and includes upstream feature processing.
-
-- **[Deletion-efficient k-means](https://arxiv.org/abs/1907.05012)** (2019). Ginart et al. use quantization and divide-and-conquer structures to reduce deletion work. Demonstrates that training can be designed around future removal; speedups concern those clustering algorithms and retained state.
-
-- **[SISA](https://arxiv.org/abs/1912.03817)** (2019). Shards data, trains separate models and saves checkpoints across slices. A deletion retrains affected shards from earlier checkpoints; the reference is the SISA training procedure, not an ordinary monolithic model.
-
-- **[Data removal-enabled forests](https://arxiv.org/abs/2009.05567)** (2020). Caches node statistics and selectively rebuilds affected subtrees. Exact deletion is defined relative to the DaRE forest learner; randomized upper splits trade some predictive flexibility for cheaper updates.
-
-- **[DeltaGrad](https://arxiv.org/abs/2006.14755)** (2020). Reuses cached training trajectories and approximate gradient updates after small dataset changes. Accelerates retraining; numerical closeness to a retrained model should not be reported as a distributional removal certificate.
-
-- **[Descent-to-Delete](https://arxiv.org/abs/2007.02923)** (2020). Uses convex optimization and reservoir sampling for long adversarial update sequences. Under its assumptions, per-deletion work and steady-state error need not grow with sequence length; guarantees differ for output and full-state removal.
-
-- **[Exact unlearning through coupling](https://proceedings.mlr.press/v134/ullah21a.html)** (2021). Couples noisy-SGD trajectories to match the model/state law of retraining after deletion. Exactness extends beyond convex losses; stability controls reuse, while excess-risk bounds assume smooth convex problems.
-
-- **[Adaptive deletion requests](https://arxiv.org/abs/2106.04378)** (2021). Requests chosen after inspecting published models violate independence assumptions used by some earlier guarantees. Gupta et al. construct an attack on SISA and a DP-based reduction for handling adaptive sequences.
+- **Summation-form unlearning** - Cao and Yang express suitable learning procedures through maintained statistical sums. Removing a record updates those sums; applicability depends on the algorithm's representation and includes upstream feature processing. [Cao and Yang 2015](<https://www.cs.columbia.edu/~junfeng/papers/unlearning/> "Towards Making Systems Forget with Machine Unlearning; IEEE S&amp;P").
+- **Deletion-efficient k-means** - Ginart et al. use quantization and divide-and-conquer structures to reduce deletion work. Demonstrates that training can be designed around future removal; speedups concern those clustering algorithms and retained state. [Ginart et al. 2019](<https://arxiv.org/abs/1907.05012> "Making AI Forget You: Data Deletion in Machine Learning; NeurIPS").
+- **SISA** - Shards data, trains separate models and saves checkpoints across slices. A deletion retrains affected shards from earlier checkpoints; the reference is the SISA training procedure, not an ordinary monolithic model. [Bourtoule et al. 2019](<https://arxiv.org/abs/1912.03817> "Machine Unlearning; arXiv").
+- **Data removal-enabled forests** - Caches node statistics and selectively rebuilds affected subtrees. Exact deletion is defined relative to the DaRE forest learner; randomized upper splits trade some predictive flexibility for cheaper updates. [Brophy and Lowd 2021](<https://arxiv.org/abs/2009.05567> "Machine Unlearning for Random Forests; ICML").
+- **DeltaGrad** - Reuses cached training trajectories and approximate gradient updates after small dataset changes. Accelerates retraining; numerical closeness to a retrained model should not be reported as a distributional removal certificate. [Wu et al. 2020](<https://arxiv.org/abs/2006.14755> "DeltaGrad: Rapid retraining of machine learning models; ICML").
+- **Descent-to-Delete** - Uses convex optimization and reservoir sampling for long adversarial update sequences. Under its assumptions, per-deletion work and steady-state error need not grow with sequence length; guarantees differ for output and full-state removal. [Neel et al. 2020](<https://arxiv.org/abs/2007.02923> "Descent-to-Delete: Gradient-Based Methods for Machine Unlearning; arXiv").
+- **Exact unlearning through coupling** - Couples noisy-SGD trajectories to match the model/state law of retraining after deletion. Exactness extends beyond convex losses; stability controls reuse, while excess-risk bounds assume smooth convex problems. [Ullah et al. 2021](<https://proceedings.mlr.press/v134/ullah21a.html> "Machine Unlearning via Algorithmic Stability; COLT").
+- **Adaptive deletion requests** - Requests chosen after inspecting published models violate independence assumptions used by some earlier guarantees. Gupta et al. construct an attack on SISA and a DP-based reduction for handling adaptive sequences. [Gupta et al. 2021](<https://arxiv.org/abs/2106.04378> "Adaptive Machine Unlearning; NeurIPS").
 
 ## Post-hoc neural methods
 
-- **[Weight scrubbing](https://arxiv.org/abs/1911.04933)** (2019). Uses approximations to how forgotten data affect trained weights, with noise to reduce remaining information. The theory and practical deep-network approximation must be separated; low forget-set accuracy alone does not validate scrubbing.
-
-- **[SCRUB](https://arxiv.org/abs/2302.09880)** (2023). Uses a frozen teacher: encourages student disagreement on forget data while preserving agreement and predictive utility on retained data. Evaluates privacy, bias removal and mislabeled-data correction with distinct success criteria.
-
-- **[Selective Synaptic Dampening](https://arxiv.org/abs/2308.07707)** (2023). Compares Fisher-based importance on training and forget sets, then damps disproportionately forget-important weights. Avoids retraining but needs importance statistics; empirical forgetting is not an exact-removal guarantee.
-
-- **[Negative Preference Optimization](https://arxiv.org/abs/2404.05868)** (2024). Downweights forget-example gradients as their likelihood falls relative to a reference model, limiting continued ascent on already-suppressed examples. TOFU gains concern forgetting/utility tradeoffs, not certified removal.
-
-- **[Representation Misdirection for Unlearning](https://arxiv.org/abs/2403.03218)** (2024). RMU redirects representations on selected forget data while preserving retain representations. Reduced hazardous-knowledge benchmark accuracy is a behavioral result; it does not establish removal of specific training records.
-
-- **[Erasing diffusion concepts](https://arxiv.org/abs/2303.07345)** (2023). Fine-tunes a text-to-image model using negative guidance for a named concept. Changes generation behavior without identifying every relevant training image; concept suppression and exact dataset deletion remain different tasks.
+- **Weight scrubbing** - Uses approximations to how forgotten data affect trained weights, with noise to reduce remaining information. The theory and practical deep-network approximation must be separated; low forget-set accuracy alone does not validate scrubbing. [Golatkar et al. 2020](<https://arxiv.org/abs/1911.04933> "Eternal Sunshine of the Spotless Net: Selective Forgetting in Deep Networks; CVPR").
+- **SCRUB** - Uses a frozen teacher: encourages student disagreement on forget data while preserving agreement and predictive utility on retained data. Evaluates privacy, bias removal and mislabeled-data correction with distinct success criteria. [Kurmanji et al. 2023](<https://arxiv.org/abs/2302.09880> "Towards Unbounded Machine Unlearning; NeurIPS").
+- **Selective Synaptic Dampening** - Compares Fisher-based importance on training and forget sets, then damps disproportionately forget-important weights. Avoids retraining but needs importance statistics; empirical forgetting is not an exact-removal guarantee. [Foster et al. 2024](<https://arxiv.org/abs/2308.07707> "Fast Machine Unlearning Without Retraining Through Selective Synaptic Dampening; AAAI").
+- **Negative Preference Optimization** - Downweights forget-example gradients as their likelihood falls relative to a reference model, limiting continued ascent on already-suppressed examples. TOFU gains concern forgetting/utility tradeoffs, not certified removal. [Zhang et al. 2024](<https://arxiv.org/abs/2404.05868> "Negative Preference Optimization: From Catastrophic Collapse to Effective Unlearning; arXiv").
+- **Representation Misdirection for Unlearning** - RMU redirects representations on selected forget data while preserving retain representations. Reduced hazardous-knowledge benchmark accuracy is a behavioral result; it does not establish removal of specific training records. [Li et al. 2024](<https://arxiv.org/abs/2403.03218> "The WMDP Benchmark: Measuring and Reducing Malicious Use With Unlearning; arXiv").
+- **Erasing diffusion concepts** - Fine-tunes a text-to-image model using negative guidance for a named concept. Changes generation behavior without identifying every relevant training image; concept suppression and exact dataset deletion remain different tasks. [Gandikota et al. 2023](<https://arxiv.org/abs/2303.07345> "Erasing Concepts from Diffusion Models; ICCV").
 
 ## Benchmarks and comparative evidence
 
-- **[TOFU](https://arxiv.org/abs/2401.06121)** (2024). Uses fictitious author profiles to create controlled forget and retain sets for LLMs. Original baselines fail to match desired forgetting and utility simultaneously; synthetic fine-tuning data make a retraining comparison feasible.
-
-- **[MUSE](https://arxiv.org/abs/2407.06460)** (2024). Measures verbatim/knowledge memorization, privacy, retained utility, deletion scale and repeated requests. On tested 7B models, suppressing text did not ensure privacy or sustained utility across successive removals.
-
-- **[NeurIPS unlearning competition](https://arxiv.org/abs/2406.09073)** (2024). Evaluates forgetting against distributions of retrained models while checking utility. Leading entries outperform tested baselines, but findings depend on the competition models, forget sets and compute-intensive evaluation protocol.
-
-- **[Interclass Confusion test](https://arxiv.org/abs/2201.06640)** (2022). Adversarially alters training labels to make removal failures observable. Exposes weaknesses missed by ordinary forget-set metrics; the test probes a constructed training intervention rather than certifying all possible data removals.
-
-- **[Per-example likelihood evaluation: RULI](https://arxiv.org/abs/2506.13009)** (2025). Uses inference attacks to assess removal efficacy and privacy against retraining. Finds failures hidden by aggregate evaluations; stronger attacks improve empirical evidence without proving absence of all leakage.
-
-- **[Distinguishing unlearned from retrained models](https://arxiv.org/abs/2505.08138)** (2025). Mirror-model experiments distinguish tested unlearning outputs from retraining controls. The paper formalizes computational unlearning; its adversary-based target is stronger than agreement on a small set of utility metrics.
+- **TOFU** - Uses fictitious author profiles to create controlled forget and retain sets for LLMs. Original baselines fail to match desired forgetting and utility simultaneously; synthetic fine-tuning data make a retraining comparison feasible. [Maini et al. 2024](<https://arxiv.org/abs/2401.06121> "TOFU: A Task of Fictitious Unlearning for LLMs; arXiv").
+- **MUSE** - Measures verbatim/knowledge memorization, privacy, retained utility, deletion scale and repeated requests. On tested 7B models, suppressing text did not ensure privacy or sustained utility across successive removals. [Shi et al. 2024](<https://arxiv.org/abs/2407.06460> "MUSE: Machine Unlearning Six-Way Evaluation for Language Models; arXiv").
+- **NeurIPS unlearning competition** - Evaluates forgetting against distributions of retrained models while checking utility. Leading entries outperform tested baselines, but findings depend on the competition models, forget sets and compute-intensive evaluation protocol. [Triantafillou et al. 2024](<https://arxiv.org/abs/2406.09073> "Are we making progress in unlearning? Findings from the first NeurIPS unlearning competition; arXiv").
+- **Interclass Confusion test** - Adversarially alters training labels to make removal failures observable. Exposes weaknesses missed by ordinary forget-set metrics; the test probes a constructed training intervention rather than certifying all possible data removals. [Goel et al. 2022](<https://arxiv.org/abs/2201.06640> "Towards Adversarial Evaluations for Inexact Machine Unlearning; arXiv").
+- **Per-example likelihood evaluation: RULI** - Uses inference attacks to assess removal efficacy and privacy against retraining. Finds failures hidden by aggregate evaluations; stronger attacks improve empirical evidence without proving absence of all leakage. [Naderloui et al. 2025](<https://arxiv.org/abs/2506.13009> "Rectifying Privacy and Efficacy Measurements in Machine Unlearning: A New Inference Attack Perspective; arXiv").
+- **Distinguishing unlearned from retrained models** - Mirror-model experiments distinguish tested unlearning outputs from retraining controls. The paper formalizes computational unlearning; its adversary-based target is stronger than agreement on a small set of utility metrics. [Brimhall et al. 2025](<https://arxiv.org/abs/2505.08138> "Mirror Mirror on the Wall, Have I Forgotten it All? A New Framework for Evaluating Machine Unlearning; arXiv").
 
 ## Recovery attacks and sequential releases
 
-- **[Eight tests of LLM unlearning](https://arxiv.org/abs/2402.16835)** (2024). Evaluates the “Who’s Harry Potter” model with extraction, question answering and representation probes. Familiarity scores suggest forgetting while other tests recover knowledge; conclusions concern that model and evaluation setting.
-
-- **[Retain-only relearning](https://arxiv.org/abs/2505.22310)** (2025). In controlled vision experiments, fine-tuning only retained examples restores forget-set accuracy after several unlearning methods, but not after retraining. Tests persistence of removal, beyond immediate post-unlearning outputs.
-
-- **[Before-and-after membership attacks](https://arxiv.org/abs/2005.02205)** (2020). Comparing model versions can reveal which records were deleted, sometimes more effectively than attacking the original model alone. An audit that exposes only the final model can miss leakage from the release history.
-
-- **[Removal evaluation record](https://arxiv.org/abs/2407.06460)** (2024). Specify forget units, retained overlap, retraining algorithm, observable state, attacks, utility and repeated requests. Include preparation/storage costs; low forget-set accuracy is insufficient when retraining would still predict those examples.
+- **Eight tests of LLM unlearning** - Evaluates the "Who's Harry Potter" model with extraction, question answering and representation probes. Familiarity scores suggest forgetting while other tests recover knowledge; conclusions concern that model and evaluation setting. [Lynch et al. 2024](<https://arxiv.org/abs/2402.16835> "Eight Methods to Evaluate Robust Unlearning in LLMs; arXiv").
+- **Retain-only relearning** - In controlled vision experiments, fine-tuning only retained examples restores forget-set accuracy after several unlearning methods, but not after retraining. Tests persistence of removal, beyond immediate post-unlearning outputs. [Siddiqui et al. 2025](<https://arxiv.org/abs/2505.22310> "From Dormant to Deleted: Tamper-Resistant Unlearning Through Weight-Space Regularization; arXiv").
+- **Before-and-after membership attacks** - Comparing model versions can reveal which records were deleted, sometimes more effectively than attacking the original model alone. An audit that exposes only the final model can miss leakage from the release history. [Chen et al. 2021](<https://arxiv.org/abs/2005.02205> "When Machine Unlearning Jeopardizes Privacy; CCS").
+- **Removal evaluation record** - Specify forget units, retained overlap, retraining algorithm, observable state, attacks, utility and repeated requests. Include preparation/storage costs; low forget-set accuracy is insufficient when retraining would still predict those examples. [Shi et al. 2024](<https://arxiv.org/abs/2407.06460> "MUSE: Machine Unlearning Six-Way Evaluation for Language Models; arXiv").
 
 ## Related topics
 
-[Privacy preserving learning](https://github.com/mlpapers/privacy-preserving-learning) · [Continual learning](https://github.com/mlpapers/continual-learning) · [Interpretability](https://github.com/mlpapers/interpretability) · [Evaluation](https://github.com/mlpapers/evaluation) · [Generative models](https://github.com/mlpapers/generative-models)
+- [Privacy preserving learning](https://mlpapers.org/privacy-preserving-learning/)
+- [Continual learning](https://mlpapers.org/continual-learning/)
+- [Interpretability](https://mlpapers.org/interpretability/)
+- [Evaluation](https://mlpapers.org/evaluation/)
+- [Generative models](https://mlpapers.org/generative-models/)
