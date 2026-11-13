@@ -37,12 +37,17 @@
 - **Per-example likelihood evaluation: RULI** - Uses inference attacks to assess removal efficacy and privacy against retraining. Finds failures hidden by aggregate evaluations; stronger attacks improve empirical evidence without proving absence of all leakage. [Naderloui et al. 2025](<https://arxiv.org/abs/2506.13009> "Rectifying Privacy and Efficacy Measurements in Machine Unlearning: A New Inference Attack Perspective; arXiv").
 - **Distinguishing unlearned from retrained models** - Mirror-model experiments distinguish tested unlearning outputs from retraining controls. The paper formalizes computational unlearning; its adversary-based target is stronger than agreement on a small set of utility metrics. [Brimhall et al. 2025](<https://arxiv.org/abs/2505.08138> "Mirror Mirror on the Wall, Have I Forgotten it All? A New Framework for Evaluating Machine Unlearning; arXiv").
 - **BatchNorm unlearning artifacts** - Recalibrating running statistics without changing weights raises forget-class accuracy by 19-78 points for six of nine methods on CIFAR-10/ResNet-18. GroupNorm controls remove this artifact; they do not establish successful data removal. [Kalani et al. 2026](<https://arxiv.org/abs/2609.08901v2> "The BatchNorm Illusion: Diagnosing Normalization Artifacts in Machine Unlearning Evaluation; NeurIPS").
+- **Features after unlearning** - Prediction agreement with retraining can break after a head update. Unlearning may need features absent from the original model, beyond resisting [retain-only relearning](#recovery-attacks-and-sequential-releases). Tested vision methods show feature mismatches and weaker transfer. [Dolgova et al. 2026](<https://arxiv.org/abs/2611.06681v1> "Do unlearning algorithms learn the right features?; arXiv").
 
 ## Recovery attacks and sequential releases
 
 - **Before-and-after membership attacks** - Comparing model versions can reveal which records were deleted, sometimes more effectively than attacking the original model alone. An audit that exposes only the final model can miss leakage from the release history. [Chen et al. 2021](<https://arxiv.org/abs/2005.02205> "When Machine Unlearning Jeopardizes Privacy; CCS").
 - **Eight tests of LLM unlearning** - Evaluates the "Who's Harry Potter" model with extraction, question answering and representation probes. Familiarity scores suggest forgetting while other tests recover knowledge; conclusions concern that model and evaluation setting. [Lynch et al. 2024](<https://arxiv.org/abs/2402.16835> "Eight Methods to Evaluate Robust Unlearning in LLMs; arXiv").
 - **Retain-only relearning** - In controlled vision experiments, fine-tuning only retained examples restores forget-set accuracy after several unlearning methods, but not after retraining. Tests persistence of removal, beyond immediate post-unlearning outputs. [Siddiqui et al. 2025](<https://arxiv.org/abs/2505.22310> "From Dormant to Deleted: Tamper-Resistant Unlearning Through Weight-Space Regularization; NeurIPS").
+
+## Conclusions
+
+Deletion-aware methods shift part of removal's cost into training organization and stored state, allowing later updates to reuse work. Post-hoc neural edits face a different difficulty: retraining on the remaining data can learn features the original model never learned. Persistent removal can therefore require new learning as well as suppression. The trade-off is between computation saved and the strength of the retraining guarantee, including its persistence under later updates.
 
 ## Related topics
 
